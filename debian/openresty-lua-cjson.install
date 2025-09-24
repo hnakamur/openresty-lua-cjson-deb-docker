@@ -1,0 +1,2 @@
+cjson.so	usr/lib/x86_64-linux-gnu/lua/5.1/
+lua/cjson/util.lua	usr/share/lua/5.1/cjson/

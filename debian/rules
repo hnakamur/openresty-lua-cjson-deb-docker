@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+
+export LUA_INCLUDE_DIR=/usr/include/luajit-2.1
+export LUA_CMODULE_DIR=/usr/lib/x86_64-linux-gnu/lua/5.1
+
+%:
+	dh $@
+
+override_dh_auto_test:
+	(cd tests && ./genutf8.pl && LUA_CPATH=../?.so LUA_PATH=../lua/?.lua luajit test.lua; rm utf8.dat)
+
+override_dh_clean:
+	dh_clean
+	rm -f debian/trash
