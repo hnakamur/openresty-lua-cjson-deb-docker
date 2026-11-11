@@ -5,7 +5,7 @@ ifdef NO_CACHE
 DOCKER_NO_CACHE=--no-cache
 endif
 
-LUAJIT_DEB_VERSION=2.1.20250826-1hn1
+LUAJIT_DEB_VERSION=2.1.20261021-1hn1
 
 # Ubuntu 26.04
 deb-ubuntu2604: build-ubuntu2604
