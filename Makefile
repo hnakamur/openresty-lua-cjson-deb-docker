@@ -7,6 +7,29 @@ endif
 
 LUAJIT_DEB_VERSION=2.1.20250826-1hn1
 
+# Ubuntu 26.04
+deb-ubuntu2604: build-ubuntu2604
+	docker run --rm -v ./${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}ubuntu26.04:/dist lua-cjson-ubuntu2604 bash -c \
+	"install /src/*${PKG_VERSION}* /dist/"
+	tar zcf ${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}ubuntu26.04.tar.gz ./${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}ubuntu26.04/
+
+build-ubuntu2604:
+	sudo mkdir -p ${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}ubuntu26.04
+	PKG_REL_DISTRIB=ubuntu26.04; \
+	(set -x; \
+	docker buildx build --load --progress=plain ${DOCKER_NO_CACHE} \
+		--build-arg FROM=ubuntu:26.04 \
+		--build-arg PKG_VERSION=${PKG_VERSION} \
+		--build-arg PKG_REL_DISTRIB=ubuntu26.04 \
+		--build-arg LUAJIT_DEB_VERSION=${LUAJIT_DEB_VERSION} \
+		--build-arg LUAJIT_DEB_OS_ID=ubuntu26.04 \
+		-t lua-cjson-ubuntu2604 . \
+	) 2>&1 | sudo tee ${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}ubuntu26.04/lua-cjson_${PKG_VERSION}-${PKG_REL_PREFIX}$${PKG_REL_DISTRIB}.build.log&& \
+	sudo xz -9 --force ${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}ubuntu26.04/lua-cjson_${PKG_VERSION}-${PKG_REL_PREFIX}$${PKG_REL_DISTRIB}.build.log
+
+run-ubuntu2604:
+	docker run --rm -it lua-cjson-ubuntu2604 bash
+
 # Ubuntu 24.04
 deb-ubuntu2404: build-ubuntu2404
 	docker run --rm -v ./${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}ubuntu24.04:/dist lua-cjson-ubuntu2404 bash -c \
@@ -52,6 +75,29 @@ build-ubuntu2204:
 
 run-ubuntu2204:
 	docker run --rm -it lua-cjson-ubuntu2204 bash
+
+# Debian 13
+deb-debian13: build-debian13
+	docker run --rm -v ./${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}debian13:/dist lua-cjson-debian13 bash -c \
+	"install /src/*${PKG_VERSION}* /dist/"
+	tar zcf ${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}debian13.tar.gz ./${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}debian13/
+
+build-debian13:
+	sudo mkdir -p ${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}debian13
+	PKG_REL_DISTRIB=debian13; \
+	(set -x; \
+	docker buildx build --load --progress=plain ${DOCKER_NO_CACHE} \
+		--build-arg FROM=debian:13 \
+		--build-arg PKG_VERSION=${PKG_VERSION} \
+		--build-arg PKG_REL_DISTRIB=debian13 \
+		--build-arg LUAJIT_DEB_VERSION=${LUAJIT_DEB_VERSION} \
+		--build-arg LUAJIT_DEB_OS_ID=debian13 \
+		-t lua-cjson-debian13 . \
+	) 2>&1 | sudo tee ${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}debian13/lua-cjson_${PKG_VERSION}-${PKG_REL_PREFIX}$${PKG_REL_DISTRIB}.build.log && \
+	sudo xz -9 --force ${PKG_ARCHIVE_NAME}-${PKG_VERSION}-${PKG_REL_PREFIX}debian13/lua-cjson_${PKG_VERSION}-${PKG_REL_PREFIX}$${PKG_REL_DISTRIB}.build.log
+
+run-debian13:
+	docker run --rm -it lua-cjson-debian13 bash
 
 # Debian 12
 deb-debian12: build-debian12
