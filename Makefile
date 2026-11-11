@@ -1,6 +1,6 @@
 PKG_ARCHIVE_NAME=openresty-lua-cjson
 PKG_VERSION=2.1.0.9
-PKG_REL_PREFIX=1hn1
+PKG_REL_PREFIX=2hn1
 ifdef NO_CACHE
 DOCKER_NO_CACHE=--no-cache
 endif
